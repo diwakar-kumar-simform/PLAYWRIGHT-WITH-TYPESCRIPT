@@ -1,6 +1,6 @@
-import {expect, test} from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-test("First Playwright Test", async ({page})=>{
+test("First Playwright Test", async ({ page }) => {
 
     // this one is using the page fixture. its inside steps are same as the next test case have steps.
     await page.goto("https://www.google.com/");
@@ -8,18 +8,19 @@ test("First Playwright Test", async ({page})=>{
     await expect(page).toHaveTitle("Google")
 });
 
-test("Browser context explanation Test with browser fixtures", async ({browser})=>{
+test("Browser context explanation Test with browser fixtures", async ({ browser }) => {
 
     // below is the default context - when you don't have anything like cookies or etc.
     const context = await browser.newContext();
     await context.newPage();
 });
 
-test.only("Browser context deafaul with page fixuters", async ({page})=>{
+test("Browser context deafaul with page fixuters", async ({ page }) => {
 
     const userName = page.locator("#username");
     const password = page.locator("#password");
     const signInBtn = page.locator("#signInBtn");
+    const cardTitles = page.locator(".card-body a");
 
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     console.log(await page.title());
@@ -38,8 +39,11 @@ test.only("Browser context deafaul with page fixuters", async ({page})=>{
     await password.fill("Learning@830$3mK2");
     await signInBtn.click();
 
-    console.log(await page.locator(".card-body a").first().textContent());
-    console.log(await page.locator(".card-body a").nth(1).textContent());
+    // console.log(await cardTitles.first().textContent());
+    // console.log(await cardTitles.nth(1).textContent());
+
+    const allTitles = await cardTitles.allTextContents(); // this will return [], because this method will not wait until the page loading.
+    console.log(allTitles); // its an array
+});
 
 
-})
