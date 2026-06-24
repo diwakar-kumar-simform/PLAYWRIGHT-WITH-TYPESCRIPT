@@ -46,4 +46,31 @@ test("Browser context deafaul with page fixuters", async ({ page }) => {
     console.log(allTitles); // its an array
 });
 
+test.only("Ui Controls", async ({ page }) => {
+    const userName = page.locator("#username");
+    const password = page.locator("#password");
+    const signInBtn = page.locator("#signInBtn");
+    const cardTitles = page.locator(".card-body a");
+
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    console.log(await page.title());
+
+    await page.locator("select.form-control").selectOption("Consultant");
+    await page.locator("select.form-control").selectOption({ label: "Teacher" });
+    
+    await page.locator(".radiotextsty").nth(1).click();
+    console.log(await page.locator(".radiotextsty").last().isChecked());
+    await expect(await page.locator(".radiotextsty").last()).toBeChecked();
+
+    console.log(await page.locator("#terms").isChecked());
+    expect(await page.locator("#terms").isChecked()).toBeFalsy();
+
+    await page.locator("#okayBtn").click()
+    // await page.pause();
+    await userName.fill("Diwakar");
+    await password.fill("32456ytui");
+    // await signInBtn.click();
+
+})
+
 
