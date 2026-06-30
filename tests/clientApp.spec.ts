@@ -142,10 +142,44 @@ test.only("Login to the client app > add to cart > verify cart item -> checkout 
         // }
     }
 
+    await expect(page.locator(".user__name [type='text']").first()).toHaveText("dummyuser4@gmail.com");
 
+    await page.locator(".field input[type='text']").nth(1).fill("123");
+    await page.locator(".field input[type='text']").nth(2).fill("Diwakar kumar");
+    await page.locator(".field input[type='text']").nth(3).fill("rahulshettyacademy");
+    await page.locator("[type='submit']").click();
+    await page.locator(".action__submit").click();
 
-    await page.pause();
+    await expect(page.locator("h1")).toHaveText(" Thankyou for the order. ");
 
+    const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent(); // incase of parent child you have to use parent class name and child class name like this
 
+    console.log("orderId = ",orderId," = orderId");
 
+    await page.locator("[routerlink*='/dashboard/myorders']").nth(1).click();
+    
+    await page.locator('[scope="row"]').first().waitFor();
+
+    const orderNumber = page.locator('[scope="row"]');
+
+    const orderCount = await page.locator('[scope="row"]').count();
+
+    console.log("order count = ", orderCount);
+
+    console.log("just before loop enterance");
+    for(let i = 0; i < orderCount; i++){
+        console.log("loop enters");
+        const orderIdNumber= await orderNumber.nth(i).textContent();
+        console.log("order id = ", orderId);
+
+        if( orderId?.includes(orderIdNumber)) {
+            console.log("yes it has the order number");
+            break;
+        }
+
+        console.log("inside loop");
+    }
+    console.log("just after loop exit");
+
+    console.log("This is the end of the program");
 })
